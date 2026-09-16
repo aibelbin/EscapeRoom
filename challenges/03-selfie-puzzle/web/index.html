@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selfie Station</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="stage">
+      <p class="kicker">Selfie station</p>
+      <h1 id="headline">Put yourself back together</h1>
+      <p id="status" class="status" hidden></p>
+
+      <section id="idle" class="panel">
+        <div class="polaroid">
+          <div class="viewfinder">
+            <video id="preview" autoplay playsinline muted></video>
+            <img id="fallbackPreview" alt="" hidden />
+          </div>
+          <button id="start" type="button">Start</button>
+        </div>
+      </section>
+
+      <section id="play" class="panel" hidden>
+        <p id="moves" class="moves">0 moves</p>
+        <div id="board" class="board" role="grid" aria-label="Sliding puzzle"></div>
+      </section>
+    </main>
+
+    <div id="clear" class="clear" hidden>
+      <p>SELFIE STATION CLEAR</p>
+      <button id="again" type="button">Again</button>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

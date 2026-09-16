@@ -1,0 +1,188 @@
+:root {
+  --ink: #1c1410;
+  --paper: #f3ead8;
+  --flash: #e2b43a;
+  --flash-ink: #1c1410;
+  --well: #0e0a08;
+  --green: #1f7a4c;
+  --green-ink: #f3ead8;
+  --gap: 5px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.stage {
+  height: 100dvh;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #cbbba0;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.status {
+  margin: 0;
+  color: var(--flash);
+}
+
+.panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  width: min(62vmin, calc(100dvh - 11rem), 480px);
+}
+
+.polaroid {
+  width: 100%;
+  background: var(--paper);
+  padding: 14px 14px 16px;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.45);
+  display: grid;
+  gap: 14px;
+  justify-items: stretch;
+}
+
+.viewfinder,
+.board {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--well);
+}
+
+.board {
+  width: 100%;
+  border: 10px solid #f3ead8;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.45);
+}
+
+.viewfinder {
+  overflow: hidden;
+  position: relative;
+}
+
+.polaroid button {
+  width: 100%;
+}
+
+video,
+#fallbackPreview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+video {
+  transform: scaleX(-1);
+}
+
+button {
+  appearance: none;
+  border: 0;
+  background: var(--flash);
+  color: var(--flash-ink);
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 0.8rem 1.8rem;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 3px;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.moves {
+  margin: 0;
+  color: #cbbba0;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+.tile {
+  border: 0;
+  padding: 0;
+  background-color: #2a211c;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.tile.empty {
+  background-image: none;
+  background-color: var(--well);
+  cursor: default;
+}
+
+.clear {
+  position: fixed;
+  inset: 0;
+  background: var(--green);
+  color: var(--green-ink);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1.25rem;
+  text-align: center;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.clear button {
+  min-width: min(280px, 80vw);
+}
+
+.clear[hidden],
+.panel[hidden],
+.status[hidden],
+img[hidden] {
+  display: none;
+}
+
+.clear p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:active {
+    transform: none;
+  }
+}
