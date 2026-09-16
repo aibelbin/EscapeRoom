@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 *.pyc
 challenges/01-pose/progress.json
+challenges/02-dribble/progress.json
+challenges/02-dribble/calibration.json

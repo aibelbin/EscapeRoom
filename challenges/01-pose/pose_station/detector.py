@@ -6,8 +6,23 @@ import numpy as np
 from pose_station.landmarks import from_pose_landmarks
 
 
+def _require_macos_safe_mediapipe() -> None:
+    # MediaPipe 1.0+ loads libmediapipe.dylib and creates PoseLandmarker on a
+    # worker thread via ctypes. On macOS that path initializes Metal
+    # (DrishtiMetalHelper) off the main thread and abort()s the process.
+    major = int(mp.__version__.split(".", 1)[0])
+    if major >= 1:
+        raise RuntimeError(
+            "MediaPipe "
+            f"{mp.__version__} crashes on macOS while creating the pose model "
+            "(Metal abort in DrishtiMetalHelper). Install the pinned version:\n"
+            "  pip install 'mediapipe==0.10.14'"
+        )
+
+
 class PoseDetector:
     def __init__(self):
+        _require_macos_safe_mediapipe()
         self._pose = mp.solutions.pose.Pose(
             static_image_mode=False,
             model_complexity=1,

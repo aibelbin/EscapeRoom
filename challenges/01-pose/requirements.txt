@@ -1,3 +1,4 @@
+# 1.0.x aborts on macOS during Metal pose init. Do not upgrade.
 mediapipe==0.10.14
 numpy>=1.26
 opencv-python>=4.8
