@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-from pose_station.matcher import VISIBILITY_MIN
 from pose_station.round import RoundState
 
 TINT_BGR = {
@@ -106,7 +105,7 @@ def _draw_named_skeleton(
     for name, data in landmarks.items():
         px, py = data[0], data[1]
         vis = data[2] if len(data) > 2 else 1.0
-        if vis < VISIBILITY_MIN:
+        if vis < 0.5:
             continue
         points[name] = (int(x + px * w), int(y + py * h))
     for a, b in BONES:
@@ -140,16 +139,6 @@ def _draw_hud(
         (24, 74),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.8,
-        tint,
-        2,
-        cv2.LINE_AA,
-    )
-    cv2.putText(
-        frame,
-        f"{int(state.score * 100)}%",
-        (24, 108),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.7,
         tint,
         2,
         cv2.LINE_AA,

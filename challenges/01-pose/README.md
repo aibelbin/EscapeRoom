@@ -1,6 +1,6 @@
 # Pose Station
 
-First escape-room obstacle. Stand in front of this laptop, copy the five poses, hold each one until the bar fills. The screen goes green and `progress.json` is written locally. No Wi-Fi.
+First escape-room obstacle. Stand in front of this laptop, copy the three weird poses, hold each one until the bar fills. The screen goes green and `progress.json` is written locally. No Wi-Fi.
 
 ## Setup (once)
 
@@ -25,11 +25,10 @@ python main.py
 
 - Fullscreen webcam, mirrored
 - Match the stick figure on the right
-- Hold until the bottom bar fills (about 1.5 seconds)
-- Watch the match percent; it turns green when you are close enough
+- Hold until the bottom bar fills (2 seconds)
 - `R` restarts, `Q` or `Esc` quits
 
-After all five poses, the window stays green. Copy `progress.json` later if you want it on the end-of-room dashboard.
+After all three poses, the window stays green. Copy `progress.json` later if you want it on the end-of-room dashboard.
 
 ## Tests
 

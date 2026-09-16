@@ -1,100 +1,24 @@
 [
   {
-    "id": "tpose",
-    "label": "T-pose: arms straight out",
-    "hold_seconds": 1.5,
+    "id": "y",
+    "label": "Arms in a Y",
+    "hold_seconds": 2.0,
     "angles": {
-      "left_elbow": { "target": 170, "tolerance": 55 },
-      "right_elbow": { "target": 170, "tolerance": 55 },
-      "left_shoulder": { "target": 100, "tolerance": 55 },
-      "right_shoulder": { "target": 100, "tolerance": 55 }
+      "left_elbow": { "target": 170, "tolerance": 40 },
+      "right_elbow": { "target": 170, "tolerance": 40 },
+      "left_shoulder": { "target": 150, "tolerance": 45 },
+      "right_shoulder": { "target": 150, "tolerance": 45 },
+      "left_knee": { "target": 175, "tolerance": 30 },
+      "right_knee": { "target": 175, "tolerance": 30 }
     },
     "skeleton": {
       "nose": [0.50, 0.12],
       "left_shoulder": [0.40, 0.28],
       "right_shoulder": [0.60, 0.28],
-      "left_elbow": [0.22, 0.28],
-      "right_elbow": [0.78, 0.28],
-      "left_wrist": [0.08, 0.28],
-      "right_wrist": [0.92, 0.28],
-      "left_hip": [0.44, 0.55],
-      "right_hip": [0.56, 0.55],
-      "left_knee": [0.44, 0.74],
-      "right_knee": [0.56, 0.74],
-      "left_ankle": [0.44, 0.93],
-      "right_ankle": [0.56, 0.93]
-    }
-  },
-  {
-    "id": "hands_up",
-    "label": "Both hands up",
-    "hold_seconds": 1.5,
-    "angles": {
-      "left_elbow": { "target": 165, "tolerance": 55 },
-      "right_elbow": { "target": 165, "tolerance": 55 },
-      "left_shoulder": { "target": 160, "tolerance": 50 },
-      "right_shoulder": { "target": 160, "tolerance": 50 }
-    },
-    "skeleton": {
-      "nose": [0.50, 0.18],
-      "left_shoulder": [0.40, 0.32],
-      "right_shoulder": [0.60, 0.32],
-      "left_elbow": [0.38, 0.18],
-      "right_elbow": [0.62, 0.18],
-      "left_wrist": [0.36, 0.05],
-      "right_wrist": [0.64, 0.05],
-      "left_hip": [0.44, 0.55],
-      "right_hip": [0.56, 0.55],
-      "left_knee": [0.44, 0.74],
-      "right_knee": [0.56, 0.74],
-      "left_ankle": [0.44, 0.93],
-      "right_ankle": [0.56, 0.93]
-    }
-  },
-  {
-    "id": "salute",
-    "label": "Right hand high, left on hip",
-    "hold_seconds": 1.5,
-    "angles": {
-      "right_elbow": { "target": 160, "tolerance": 55 },
-      "right_shoulder": { "target": 155, "tolerance": 50 },
-      "left_elbow": { "target": 75, "tolerance": 50 },
-      "left_shoulder": { "target": 70, "tolerance": 50 }
-    },
-    "skeleton": {
-      "nose": [0.50, 0.12],
-      "left_shoulder": [0.40, 0.28],
-      "right_shoulder": [0.60, 0.28],
-      "left_elbow": [0.32, 0.42],
-      "right_elbow": [0.66, 0.14],
-      "left_wrist": [0.44, 0.52],
-      "right_wrist": [0.70, 0.04],
-      "left_hip": [0.44, 0.55],
-      "right_hip": [0.56, 0.55],
-      "left_knee": [0.44, 0.74],
-      "right_knee": [0.56, 0.74],
-      "left_ankle": [0.44, 0.93],
-      "right_ankle": [0.56, 0.93]
-    }
-  },
-  {
-    "id": "superhero",
-    "label": "Hands on hips",
-    "hold_seconds": 1.5,
-    "angles": {
-      "left_elbow": { "target": 70, "tolerance": 50 },
-      "right_elbow": { "target": 70, "tolerance": 50 },
-      "left_shoulder": { "target": 70, "tolerance": 50 },
-      "right_shoulder": { "target": 70, "tolerance": 50 }
-    },
-    "skeleton": {
-      "nose": [0.50, 0.12],
-      "left_shoulder": [0.40, 0.28],
-      "right_shoulder": [0.60, 0.28],
-      "left_elbow": [0.28, 0.42],
-      "right_elbow": [0.72, 0.42],
-      "left_wrist": [0.42, 0.52],
-      "right_wrist": [0.58, 0.52],
+      "left_elbow": [0.28, 0.18],
+      "right_elbow": [0.72, 0.18],
+      "left_wrist": [0.16, 0.06],
+      "right_wrist": [0.84, 0.06],
       "left_hip": [0.44, 0.55],
       "right_hip": [0.56, 0.55],
       "left_knee": [0.44, 0.74],
@@ -105,12 +29,14 @@
   },
   {
     "id": "stork",
-    "label": "Lift your left knee",
-    "hold_seconds": 1.5,
+    "label": "Stork stand",
+    "hold_seconds": 2.0,
     "angles": {
-      "left_hip": { "target": 100, "tolerance": 50 },
-      "right_hip": { "target": 170, "tolerance": 40 },
-      "right_knee": { "target": 170, "tolerance": 40 }
+      "left_hip": { "target": 100, "tolerance": 40 },
+      "right_hip": { "target": 175, "tolerance": 30 },
+      "right_knee": { "target": 175, "tolerance": 30 },
+      "left_elbow": { "target": 165, "tolerance": 40 },
+      "right_elbow": { "target": 165, "tolerance": 40 }
     },
     "skeleton": {
       "nose": [0.50, 0.12],
@@ -125,6 +51,34 @@
       "left_knee": [0.32, 0.48],
       "right_knee": [0.56, 0.74],
       "left_ankle": [0.22, 0.42],
+      "right_ankle": [0.56, 0.93]
+    }
+  },
+  {
+    "id": "disco",
+    "label": "Disco point",
+    "hold_seconds": 2.0,
+    "angles": {
+      "right_elbow": { "target": 160, "tolerance": 40 },
+      "right_shoulder": { "target": 155, "tolerance": 45 },
+      "left_elbow": { "target": 80, "tolerance": 40 },
+      "left_shoulder": { "target": 70, "tolerance": 40 },
+      "left_knee": { "target": 175, "tolerance": 30 },
+      "right_knee": { "target": 175, "tolerance": 30 }
+    },
+    "skeleton": {
+      "nose": [0.50, 0.12],
+      "left_shoulder": [0.40, 0.28],
+      "right_shoulder": [0.60, 0.28],
+      "left_elbow": [0.32, 0.42],
+      "right_elbow": [0.72, 0.16],
+      "left_wrist": [0.44, 0.52],
+      "right_wrist": [0.82, 0.04],
+      "left_hip": [0.44, 0.55],
+      "right_hip": [0.56, 0.55],
+      "left_knee": [0.44, 0.74],
+      "right_knee": [0.56, 0.74],
+      "left_ankle": [0.44, 0.93],
       "right_ankle": [0.56, 0.93]
     }
   }

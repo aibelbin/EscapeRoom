@@ -1,8 +1,7 @@
 from pose_station.angles import angle_deg
 
-IN_POSE_THRESHOLD = 0.65
-VISIBILITY_MIN = 0.2
-MIN_SCORED_JOINTS = 2
+IN_POSE_THRESHOLD = 0.80
+VISIBILITY_MIN = 0.5
 
 JOINT_TRIPLES: dict[str, tuple[str, str, str]] = {
     "left_elbow": ("left_shoulder", "left_elbow", "left_wrist"),
@@ -31,7 +30,7 @@ def score_pose(
 ) -> float:
     if not pose_angles:
         return 0.0
-    parts: list[float] = []
+    matched = 0
     for name, spec in pose_angles.items():
         triple = JOINT_TRIPLES.get(name)
         if triple is None:
@@ -41,12 +40,10 @@ def score_pose(
         c = _point(landmarks, triple[2])
         if a is None or b is None or c is None:
             continue
-        tolerance = max(float(spec["tolerance"]), 1.0)
         error = abs(angle_deg(a, b, c) - spec["target"])
-        parts.append(max(0.0, 1.0 - error / tolerance))
-    if len(parts) < MIN_SCORED_JOINTS:
-        return 0.0
-    return sum(parts) / len(parts)
+        if error <= spec["tolerance"]:
+            matched += 1
+    return matched / len(pose_angles)
 
 
 def is_in_pose(score: float) -> bool:

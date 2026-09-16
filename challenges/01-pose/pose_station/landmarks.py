@@ -16,15 +16,12 @@ NAME_TO_INDEX = {
 
 
 def _score(point) -> float:
-    vis = getattr(point, "visibility", None)
-    presence = getattr(point, "presence", None)
-    values = [float(v) for v in (vis, presence) if v is not None]
-    if not values:
+    value = getattr(point, "visibility", None)
+    if value is None:
+        value = getattr(point, "presence", None)
+    if value is None:
         return 1.0
-    best = max(values)
-    if best < 0.01:
-        return 1.0
-    return best
+    return float(value)
 
 
 def from_pose_landmarks(landmarks) -> dict[str, tuple[float, float, float]]:
