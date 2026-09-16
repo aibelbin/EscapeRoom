@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EscapeRoom station progress",
+  "type": "object",
+  "required": ["id", "complete", "poses_cleared", "poses_total", "completed_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "complete": { "type": "boolean" },
+    "poses_cleared": { "type": "integer", "minimum": 0 },
+    "poses_total": { "type": "integer", "minimum": 1 },
+    "completed_at": { "type": "string" }
+  }
+}
