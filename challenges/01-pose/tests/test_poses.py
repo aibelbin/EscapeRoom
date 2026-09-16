@@ -25,12 +25,19 @@ def test_load_poses_reads_required_fields(tmp_path: Path):
     assert poses[0]["skeleton"]["left_wrist"] == [0.2, 0.1]
 
 
-def test_packaged_poses_has_three_named_poses():
+def test_packaged_poses_cover_the_station():
     path = Path(__file__).resolve().parents[1] / "poses.json"
     poses = load_poses(path)
-    assert [p["id"] for p in poses] == ["y", "stork", "disco"]
+    assert [p["id"] for p in poses] == [
+        "tpose",
+        "hands_up",
+        "salute",
+        "superhero",
+        "stork",
+    ]
+    assert poses[0]["label"].lower().startswith("t-pose")
     for pose in poses:
         assert pose["label"]
-        assert pose["hold_seconds"] == 2.0
+        assert pose["hold_seconds"] == 1.5
         assert pose["angles"]
         assert pose["skeleton"]

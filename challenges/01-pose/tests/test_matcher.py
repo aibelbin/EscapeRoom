@@ -36,27 +36,31 @@ def test_bent_elbow_targets_do_not_match_standing():
     assert not is_in_pose(score)
 
 
-def test_low_visibility_joint_does_not_match():
+def test_low_visibility_joint_is_skipped():
     landmarks = dict(STANDING)
     landmarks["left_wrist"] = (0.40, 0.55, 0.1)
     pose = {
         "left_elbow": {"target": 180.0, "tolerance": 20.0},
         "right_elbow": {"target": 180.0, "tolerance": 20.0},
+        "left_knee": {"target": 180.0, "tolerance": 20.0},
     }
-    assert score_pose(landmarks, pose) == 0.5
+    assert score_pose(landmarks, pose) == 1.0
 
 
-def test_threshold_is_eighty_percent():
-    assert IN_POSE_THRESHOLD == 0.80
-    assert is_in_pose(0.80)
-    assert not is_in_pose(0.79)
+def test_threshold_is_sixty_five_percent():
+    assert IN_POSE_THRESHOLD == 0.65
+    assert is_in_pose(0.65)
+    assert not is_in_pose(0.64)
 
 
-def test_missing_landmark_fails_that_joint():
-    landmarks = dict(STANDING)
-    del landmarks["right_wrist"]
+def test_too_few_visible_joints_scores_zero():
+    landmarks = {
+        "left_shoulder": (0.40, 0.25, 0.05),
+        "left_elbow": (0.40, 0.40, 0.05),
+        "left_wrist": (0.40, 0.55, 0.05),
+    }
     pose = {
         "left_elbow": {"target": 180.0, "tolerance": 20.0},
         "right_elbow": {"target": 180.0, "tolerance": 20.0},
     }
-    assert score_pose(landmarks, pose) == 0.5
+    assert score_pose(landmarks, pose) == 0.0
