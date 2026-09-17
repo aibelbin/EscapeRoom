@@ -1,8 +1,8 @@
 # Selfie Puzzle
 
-Third laptop in the room. Someone stands in front of the webcam, hits **Start**, and has to slide their own face back together.
+Third laptop in the room. Someone stands in front of the webcam, hits **Start**, and drags squares of their own face onto an empty board.
 
-3×3 board. Camera optional. Green screen + local `progress.json`. No Wi-Fi.
+3×3 jigsaw. Camera optional. Green screen + local `progress.json`. No Wi-Fi.
 
 Python 3.12 is enough. No venv, no pip.
 
@@ -26,12 +26,10 @@ Tape the laptop so the guest’s head fills the polaroid. Leave it on that page 
 ## How it plays
 
 1. Live preview in the polaroid. If the camera fails, a backup photo shows instead.
-2. **Start** snaps a square crop and scrambles it into 8 tiles + a hole.
-3. Slide tiles into the hole until the photo is whole.
+2. **Start** snaps a square crop and cuts it into 9 squares in a tray.
+3. Drag pieces onto the empty 3×3 board. Drop on an occupied cell to swap. Drop off the board to return a piece to the tray.
 4. Screen goes green: **SELFIE STATION CLEAR**. `progress.json` is written in this folder.
 5. **Again** takes a new photo for the next guest.
-
-The scramble only uses legal slides, so it is always solvable.
 
 ---
 
@@ -39,8 +37,8 @@ The scramble only uses legal slides, so it is always solvable.
 
 | Input | What it does |
 | --- | --- |
-| Click a tile next to the hole | Slide it |
-| Arrow keys | Slide the tile in that direction |
+| Drag a piece onto a cell | Place it (swap if the cell is taken) |
+| Drop off the board | Return it to the tray |
 | **Again** | New photo, new scramble |
 
 ---
@@ -51,7 +49,7 @@ Use this when you want the backup photo on purpose, without fighting the webcam:
 
 [http://127.0.0.1:8765/?fallback=1](http://127.0.0.1:8765/?fallback=1)
 
-You should see the goofy stock face, a gold status line that says `Using fallback photo`, then a 3×3 of that image after **Start**.
+You should see the goofy stock face, a gold status line that says `Using fallback photo`, then the tray of squares after **Start**.
 
 It also falls back on its own if:
 

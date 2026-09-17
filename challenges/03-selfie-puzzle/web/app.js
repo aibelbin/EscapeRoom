@@ -1,4 +1,4 @@
-import { EMPTY, SIZE, canSlide, createSolved, isSolved, slide, shuffle } from "./puzzle.js";
+import { SIZE, createRound, isSolved, place, returnToTray } from "./puzzle.js";
 
 const FALLBACK = "/assets/fallback.png";
 const preview = document.querySelector("#preview");
@@ -8,7 +8,7 @@ const againBtn = document.querySelector("#again");
 const idle = document.querySelector("#idle");
 const play = document.querySelector("#play");
 const boardEl = document.querySelector("#board");
-const movesEl = document.querySelector("#moves");
+const trayEl = document.querySelector("#tray");
 const statusEl = document.querySelector("#status");
 const clearEl = document.querySelector("#clear");
 const headline = document.querySelector("#headline");
@@ -16,9 +16,9 @@ const headline = document.querySelector("#headline");
 let stream = null;
 let usingFallback = false;
 let photoUrl = FALLBACK;
-let board = createSolved();
-let moves = 0;
+let puzzle = createRound();
 let wrote = false;
+let drag = null;
 
 function showStatus(text) {
   statusEl.hidden = !text;
@@ -117,38 +117,128 @@ function tilePosition(tileId) {
   return `${col * pct}% ${row * pct}%`;
 }
 
-function render() {
-  boardEl.replaceChildren();
-  board.forEach((tileId, index) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "tile" + (tileId === EMPTY ? " empty" : "");
-    btn.setAttribute("role", "gridcell");
-    if (tileId !== EMPTY) {
-      btn.style.backgroundImage = `url("${photoUrl}")`;
-      btn.style.backgroundSize = `${SIZE * 100}% ${SIZE * 100}%`;
-      btn.style.backgroundPosition = tilePosition(tileId);
-      btn.setAttribute("aria-label", `Tile ${tileId + 1}`);
-      btn.addEventListener("click", () => trySlide(index));
-    } else {
-      btn.tabIndex = -1;
-      btn.setAttribute("aria-label", "Empty");
-    }
-    boardEl.append(btn);
-  });
-  movesEl.textContent = `${moves} ${moves === 1 ? "move" : "moves"}`;
+function pieceStyle(el, id) {
+  el.style.backgroundImage = `url("${photoUrl}")`;
+  el.style.backgroundSize = `${SIZE * 100}% ${SIZE * 100}%`;
+  el.style.backgroundPosition = tilePosition(id);
 }
 
-function trySlide(index) {
-  if (!canSlide(board, index)) {
+function makePiece(id) {
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = "piece";
+  el.dataset.piece = String(id);
+  el.setAttribute("aria-label", `Piece ${id + 1}`);
+  pieceStyle(el, id);
+  el.addEventListener("pointerdown", onPointerDown);
+  return el;
+}
+
+function render() {
+  boardEl.replaceChildren();
+  puzzle.board.forEach((pieceId, slot) => {
+    const cell = document.createElement("div");
+    cell.className = "slot";
+    cell.dataset.slot = String(slot);
+    cell.setAttribute("role", "gridcell");
+    if (pieceId !== null) {
+      cell.append(makePiece(pieceId));
+    }
+    boardEl.append(cell);
+  });
+  trayEl.replaceChildren();
+  puzzle.tray.forEach((pieceId) => {
+    trayEl.append(makePiece(pieceId));
+  });
+}
+
+function snapshot(state) {
+  return { board: state.board.slice(), tray: state.tray.slice() };
+}
+
+function onPointerDown(event) {
+  if (event.button !== 0 || !clearEl.hidden || drag) {
     return;
   }
-  board = slide(board, index);
-  moves += 1;
+  const el = event.currentTarget;
+  const pieceId = Number(el.dataset.piece);
+  el.setPointerCapture(event.pointerId);
+  const size = el.getBoundingClientRect().width;
+  el.style.setProperty("--drag-size", `${size}px`);
+  el.classList.add("dragging");
+  drag = {
+    pieceId,
+    origin: snapshot(puzzle),
+    el,
+    pointerId: event.pointerId,
+  };
+  moveGhost(event);
+  window.addEventListener("pointermove", onPointerMove);
+  window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("pointercancel", onPointerCancel);
+  event.preventDefault();
+}
+
+function moveGhost(event) {
+  if (!drag) {
+    return;
+  }
+  const size = Number.parseFloat(drag.el.style.getPropertyValue("--drag-size")) || 80;
+  drag.el.style.left = `${event.clientX - size / 2}px`;
+  drag.el.style.top = `${event.clientY - size / 2}px`;
+}
+
+function onPointerMove(event) {
+  if (!drag || event.pointerId !== drag.pointerId) {
+    return;
+  }
+  moveGhost(event);
+}
+
+function dropTarget(event) {
+  const ghost = drag?.el;
+  if (ghost) {
+    ghost.style.visibility = "hidden";
+  }
+  const hit = document.elementFromPoint(event.clientX, event.clientY);
+  if (ghost) {
+    ghost.style.visibility = "";
+  }
+  const slot = hit?.closest("[data-slot]");
+  if (slot) {
+    return { kind: "slot", slot: Number(slot.dataset.slot) };
+  }
+  return { kind: "tray" };
+}
+
+function endDrag() {
+  window.removeEventListener("pointermove", onPointerMove);
+  window.removeEventListener("pointerup", onPointerUp);
+  window.removeEventListener("pointercancel", onPointerCancel);
+  drag = null;
+}
+
+function onPointerUp(event) {
+  if (!drag || event.pointerId !== drag.pointerId) {
+    return;
+  }
+  const { pieceId } = drag;
+  const target = dropTarget(event);
+  endDrag();
+  puzzle = target.kind === "slot" ? place(puzzle, pieceId, target.slot) : returnToTray(puzzle, pieceId);
   render();
-  if (isSolved(board)) {
+  if (isSolved(puzzle)) {
     onSolved();
   }
+}
+
+function onPointerCancel(event) {
+  if (!drag || event.pointerId !== drag.pointerId) {
+    return;
+  }
+  puzzle = drag.origin;
+  endDrag();
+  render();
 }
 
 async function onSolved() {
@@ -166,8 +256,7 @@ async function onSolved() {
 
 function beginPuzzle(url) {
   photoUrl = url;
-  board = shuffle(createSolved(), 80);
-  moves = 0;
+  puzzle = createRound();
   wrote = false;
   idle.hidden = true;
   play.hidden = false;
@@ -201,24 +290,6 @@ function onAgain() {
   boot();
 }
 
-function onKey(event) {
-  if (play.hidden || !clearEl.hidden) {
-    return;
-  }
-  const empty = board.indexOf(EMPTY);
-  const row = Math.floor(empty / SIZE);
-  const col = empty % SIZE;
-  let target = null;
-  if (event.key === "ArrowLeft" && col < SIZE - 1) target = empty + 1;
-  if (event.key === "ArrowRight" && col > 0) target = empty - 1;
-  if (event.key === "ArrowUp" && row < SIZE - 1) target = empty + SIZE;
-  if (event.key === "ArrowDown" && row > 0) target = empty - SIZE;
-  if (target !== null) {
-    event.preventDefault();
-    trySlide(target);
-  }
-}
-
 async function boot() {
   showStatus("");
   preview.hidden = false;
@@ -237,5 +308,4 @@ async function boot() {
 
 startBtn.addEventListener("click", onStart);
 againBtn.addEventListener("click", onAgain);
-window.addEventListener("keydown", onKey);
 boot();

@@ -1,69 +1,81 @@
 export const SIZE = 3;
-export const EMPTY = SIZE * SIZE - 1;
+const COUNT = SIZE * SIZE;
 
-export function createSolved() {
-  return Array.from({ length: SIZE * SIZE }, (_, i) => i);
+export function emptyBoard() {
+  return Array.from({ length: COUNT }, () => null);
 }
 
-export function isSolved(board) {
-  return board.every((tile, i) => tile === i);
-}
-
-export function emptyIndex(board) {
-  return board.indexOf(EMPTY);
-}
-
-function rc(index) {
-  return { row: Math.floor(index / SIZE), col: index % SIZE };
-}
-
-export function canSlide(board, tileIndex) {
-  const empty = emptyIndex(board);
-  if (tileIndex < 0 || tileIndex >= board.length || tileIndex === empty) {
-    return false;
-  }
-  const a = rc(tileIndex);
-  const b = rc(empty);
-  const dist = Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
-  return dist === 1;
-}
-
-export function slide(board, tileIndex) {
-  if (!canSlide(board, tileIndex)) {
-    return board.slice();
-  }
-  const next = board.slice();
-  const empty = emptyIndex(next);
-  [next[tileIndex], next[empty]] = [next[empty], next[tileIndex]];
-  return next;
-}
-
-export function neighborsOfEmpty(board) {
-  const empty = emptyIndex(board);
-  const { row, col } = rc(empty);
-  const spots = [
-    [row - 1, col],
-    [row + 1, col],
-    [row, col - 1],
-    [row, col + 1],
-  ];
-  return spots
-    .filter(([r, c]) => r >= 0 && r < SIZE && c >= 0 && c < SIZE)
-    .map(([r, c]) => r * SIZE + c);
-}
-
-export function shuffle(board, moves = 80, rng = Math.random) {
-  let next = board.slice();
-  for (let i = 0; i < moves; i += 1) {
-    const options = neighborsOfEmpty(next);
-    const pick = options[Math.floor(rng() * options.length) % options.length];
-    next = slide(next, pick);
-  }
-  let extra = 0;
-  while (isSolved(next) && extra < 16) {
-    const options = neighborsOfEmpty(next);
-    next = slide(next, options[0]);
-    extra += 1;
+function shuffle(list, rng) {
+  const next = list.slice();
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1)) % (i + 1);
+    [next[i], next[j]] = [next[j], next[i]];
   }
   return next;
+}
+
+function scrambleTray(rng) {
+  const ids = Array.from({ length: COUNT }, (_, i) => i);
+  let tray = shuffle(ids, rng);
+  let guard = 0;
+  while (tray.every((id, i) => id === i) && guard < 8) {
+    tray = shuffle(ids, rng);
+    guard += 1;
+  }
+  if (tray.every((id, i) => id === i)) {
+    [tray[0], tray[1]] = [tray[1], tray[0]];
+  }
+  return tray;
+}
+
+export function createRound(rng = Math.random) {
+  return { board: emptyBoard(), tray: scrambleTray(rng) };
+}
+
+export function isSolved(state) {
+  return state.board.length === COUNT && state.board.every((piece, i) => piece === i);
+}
+
+function removeFromTray(tray, pieceId) {
+  return tray.filter((id) => id !== pieceId);
+}
+
+export function place(state, pieceId, slot) {
+  const board = state.board.slice();
+  let tray = state.tray.slice();
+  if (slot < 0 || slot >= COUNT) {
+    return { board, tray };
+  }
+  const fromSlot = board.indexOf(pieceId);
+  const inTray = tray.includes(pieceId);
+  if (fromSlot < 0 && !inTray) {
+    return { board, tray };
+  }
+  if (fromSlot === slot) {
+    return { board, tray };
+  }
+  const occupant = board[slot];
+  if (fromSlot >= 0) {
+    board[fromSlot] = occupant;
+  } else {
+    tray = removeFromTray(tray, pieceId);
+    if (occupant !== null) {
+      tray.push(occupant);
+    }
+  }
+  board[slot] = pieceId;
+  return { board, tray };
+}
+
+export function returnToTray(state, pieceId) {
+  const board = state.board.slice();
+  const tray = state.tray.slice();
+  const fromSlot = board.indexOf(pieceId);
+  if (fromSlot >= 0) {
+    board[fromSlot] = null;
+  }
+  if (!tray.includes(pieceId)) {
+    tray.push(pieceId);
+  }
+  return { board, tray };
 }

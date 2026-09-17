@@ -10,7 +10,7 @@ Python 3.12 on the Macs. Pose needs that pin because of MediaPipe.
 |---|--------|---------------------|---------|
 | 1 | [`challenges/01-pose`](challenges/01-pose) | Copy three weird poses and hold them | Ready |
 | 2 | [`challenges/02-dribble`](challenges/02-dribble) | Dribble a ball down a cone lane | Ready |
-| 3 | [`challenges/03-selfie-puzzle`](challenges/03-selfie-puzzle) | Slide their own selfie back together | Ready |
+| 3 | [`challenges/03-selfie-puzzle`](challenges/03-selfie-puzzle) | Drag selfie squares onto a jigsaw board | Ready |
 | 4 | [`challenges/04-laser-maze`](challenges/04-laser-maze) | Break (or don't break) laser tripwires | Arduino sketch only |
 
 `shared/progress.schema.json` is the file shape every ready station writes. `dashboard/` is still empty.
@@ -66,11 +66,11 @@ First launch, click calibration: left near → left far → right near → right
 
 ## 3. Selfie puzzle
 
-Local page, Chrome or Safari. Polaroid preview, **Start**, 3×3 sliding puzzle of their face. Always solvable (legal slides only). Clear: `SELFIE STATION CLEAR`. **Again** for the next guest.
+Local page, Chrome or Safari. Polaroid preview, **Start**, then nine selfie squares in a tray under an empty 3×3 board. Drag a piece onto a cell. Occupied cell swaps. Off the board returns to the tray. Clear: `SELFIE STATION CLEAR`. **Again** for the next guest.
 
 No camera, blocked camera, or a hung `getUserMedia` (~2.5s) → fallback photo. Force it with [`?fallback=1`](http://127.0.0.1:8765/?fallback=1).
 
-Click a neighbor tile or use arrows. `Ctrl+C` stops the server.
+`Ctrl+C` stops the server.
 
 ---
 

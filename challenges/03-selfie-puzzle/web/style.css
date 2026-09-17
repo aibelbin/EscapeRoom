@@ -68,6 +68,11 @@ h1 {
   justify-items: stretch;
 }
 
+.play-panel {
+  width: min(52vmin, calc(100dvh - 16rem), 420px);
+  gap: 0.85rem;
+}
+
 .viewfinder,
 .board {
   width: 100%;
@@ -124,11 +129,6 @@ button:active {
   transform: translateY(1px);
 }
 
-.moves {
-  margin: 0;
-  color: #cbbba0;
-}
-
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -137,18 +137,58 @@ button:active {
   padding: var(--gap);
 }
 
-.tile {
-  border: 0;
-  padding: 0;
-  background-color: #2a211c;
-  background-repeat: no-repeat;
-  cursor: pointer;
+.slot {
+  min-width: 0;
+  min-height: 0;
+  background: #1a1411;
 }
 
-.tile.empty {
-  background-image: none;
-  background-color: var(--well);
-  cursor: default;
+button.piece {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  font-size: 0;
+  background-color: #2a211c;
+  background-repeat: no-repeat;
+  cursor: grab;
+  touch-action: none;
+}
+
+button.piece:active {
+  transform: none;
+}
+
+.piece:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: -3px;
+}
+
+.piece.dragging {
+  position: fixed;
+  z-index: 30;
+  width: var(--drag-size);
+  height: var(--drag-size);
+  margin: 0;
+  pointer-events: none;
+  cursor: grabbing;
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.5);
+}
+
+.tray {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+  min-height: 4.5rem;
+}
+
+.tray .piece {
+  flex: 0 0 calc((100% - 20px) / 5);
+  width: calc((100% - 20px) / 5);
+  height: auto;
+  aspect-ratio: 1;
 }
 
 .clear {
