@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Escape Room</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body data-state="idle">
+    <main class="floor">
+      <header class="mast">
+        <p class="mark">Escape room</p>
+        <p id="phase" class="phase">Waiting</p>
+      </header>
+
+      <p id="runner" class="runner">Waiting for next run</p>
+
+      <div class="stage">
+        <p id="clock" class="clock">00:00.0</p>
+        <section class="ranks-panel" aria-label="Leaderboard">
+          <ol id="ranks" class="ranks"></ol>
+          <p id="empty" class="empty">No finishes yet</p>
+        </section>
+      </div>
+    </main>
+
+    <form id="host" class="host" autocomplete="off">
+      <label class="field">
+        <span>Name</span>
+        <input id="name" name="name" type="text" maxlength="80" spellcheck="false" />
+      </label>
+      <div class="actions">
+        <button id="start" type="button">Start</button>
+        <button id="stop" type="button">Stop</button>
+        <button id="reset" type="button">Reset</button>
+        <button id="finish" type="button" class="finish">Finish</button>
+      </div>
+      <p id="notice" class="notice" role="status"></p>
+    </form>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

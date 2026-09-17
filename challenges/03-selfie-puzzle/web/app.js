@@ -128,6 +128,7 @@ function makePiece(id) {
   el.type = "button";
   el.className = "piece";
   el.dataset.piece = String(id);
+  el.draggable = false;
   el.setAttribute("aria-label", `Piece ${id + 1}`);
   pieceStyle(el, id);
   el.addEventListener("pointerdown", onPointerDown);
